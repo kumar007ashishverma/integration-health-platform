@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: integration-health-platform
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5433/integration_health}
+    username: ${DATABASE_USERNAME:health}
+    password: ${DATABASE_PASSWORD:health}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+  thymeleaf:
+    cache: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+integration:
+  health:
+    evaluation-window-minutes: ${HEALTH_EVALUATION_WINDOW_MINUTES:60}
+    minimum-request-count: ${HEALTH_MINIMUM_REQUEST_COUNT:20}
+    refresh-interval-seconds: ${HEALTH_REFRESH_INTERVAL_SECONDS:300}
+server:
+  port: 8081

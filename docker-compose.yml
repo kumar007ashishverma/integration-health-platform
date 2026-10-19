@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: integration_health
+      POSTGRES_USER: health
+      POSTGRES_PASSWORD: health
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U health -d integration_health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  app:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: jdbc:postgresql://postgres:5432/integration_health
+      DATABASE_USERNAME: health
+      DATABASE_PASSWORD: health
+    ports:
+      - "8080:8080"
+volumes:
+  postgres_data:
