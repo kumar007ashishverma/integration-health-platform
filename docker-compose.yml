@@ -24,6 +24,6 @@ services:
       DATABASE_USERNAME: health
       DATABASE_PASSWORD: health
     ports:
-      - "8080:8080"
+      - "8081:8081"
 volumes:
   postgres_data:
